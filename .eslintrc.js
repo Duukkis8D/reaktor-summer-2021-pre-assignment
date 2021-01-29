@@ -35,6 +35,7 @@ module.exports = {
 			'never'
 		],
 		'camelcase': 'error',
+		'eqeqeq': 'error',
 		'array-bracket-spacing': [
 			'error',
 			'always'
