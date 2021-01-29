@@ -1,24 +1,26 @@
 import React from 'react'
 import axios from 'axios'
 
-// The app only gets jacket data now.
+// The app only gets glove data now.
 class App extends React.Component {
 	constructor( props ) {
 		super( props )
+		//this.baseUrl = 'https://bad-api-assignment.reaktor.com/v2' CORS error occurs
 		this.baseUrl = 'https://bad-api-assignment.reaktor.com'
-		this.jacketsUrl = `${this.baseUrl}/products/jackets`
+		//this.glovesUrl = `${this.baseUrl}/products/gloves` CORS error occurs
+		this.glovesUrl = `${this.baseUrl}/products/jackets`
 		this.state = {
-			jackets: [],
-			jacketManufacturers: [],
-			jacketAvailability: Map
+			gloves: [],
+			gloveManufacturers: [],
+			gloveAvailability: Map
 		}
 	}
 
 	componentDidMount() {
 		// Finds unique manufacturers from a long list with many duplicants.
-		const findManufacturers = jackets => {
+		const findManufacturers = gloves => {
 			const manufacturers = []
-			for ( let manufacturer of jackets ) {
+			for ( let manufacturer of gloves ) {
 				if ( manufacturers.indexOf( manufacturer ) === -1 ) {
 					manufacturers.push( manufacturer )
 				}
@@ -27,36 +29,36 @@ class App extends React.Component {
 			return manufacturers
 		}
 
-		// Gets all jackets.
+		// Gets all gloves.
 		axios
-			.get( this.jacketsUrl )
+			.get( this.glovesUrl )
 			.then( response => {
-				const allManufacturers = findManufacturers( response.data.map( jacket => jacket.manufacturer ) )
+				const allManufacturers = findManufacturers( response.data.map( glove => glove.manufacturer ) )
 				this.setState( { 
-					jackets: response.data,
-					jacketManufacturers: allManufacturers
+					gloves: response.data,
+					gloveManufacturers: allManufacturers
 				} )
 			} )
 
-		const jacketAvailabilityPromises = new Map()
-		const jacketAvailability = jacketManufacturers => {  
-			jacketManufacturers.forEach( manufacturer => {
-				jacketAvailabilityPromises.set( manufacturer, axios.get( `${this.baseUrl}/availability/${manufacturer}` ) )
+		const gloveAvailabilityPromises = new Map()
+		const gloveAvailability = gloveManufacturers => {  
+			gloveManufacturers.forEach( manufacturer => {
+				gloveAvailabilityPromises.set( manufacturer, axios.get( `${this.baseUrl}/availability/${manufacturer}` ) )
 				console.log( manufacturer )
 			} )
 
-			return jacketAvailabilityPromises
+			return gloveAvailabilityPromises
 		}
 
 		// How to keep manufacturer information during HTTP requests? I need to know which HTTP response is for which
-		// manufacturer. Perhaps copying the keys from jacketAvailabilityPromises Map to jacketAvailabilityData Map...
-		const jacketAvailabilityData = new Map()
+		// manufacturer. Perhaps copying the keys from gloveAvailabilityPromises Map to gloveAvailabilityData Map...
+		const gloveAvailabilityData = new Map()
 		Promise
-			.all( jacketAvailability( this.state.jacketManufacturers ) )
+			.all( gloveAvailability( this.state.gloveManufacturers ) )
 			.then( results => {
 				results.forEach( response => {
 					console.log( response.data )
-					jacketAvailabilityData.set( response.data )
+					gloveAvailabilityData.set( response.data )
 				} )
 			} )
 
@@ -65,8 +67,8 @@ class App extends React.Component {
 	
 	render() {
 		return (
-			// This table code should be in its own component ProductList. Product type (jacket, shirt or accessory) could
-			// be passed as props to the component. Now only jackets get rendered and there is no availability information.
+			// This table code should be in its own component ProductList. Product type (glove, facemask or beanie) could
+			// be passed as props to the component. Now only gloves get rendered and there is no availability information.
 			// Product availability information could be found with using correct manufacturer in the HTTP request url and 
 			// then searching with specific product id.
 			<table>
@@ -81,13 +83,13 @@ class App extends React.Component {
 					</tr>
 				</thead>
 				<tbody>
-					{ this.state.jackets.map( jacket => 
-						<tr key={ jacket.id }>
-							<td key={ jacket.id }>{ jacket.id }</td>
-							<td key={ jacket.name }>{ jacket.name }</td>
-							<td key={ jacket.color }>{ jacket.color.map( color => `${color} ` ) }</td>
-							<td key={ jacket.manufacturer }>{ jacket.manufacturer }</td>
-							<td key={ jacket.price }>{ jacket.price }</td>
+					{ this.state.gloves.map( glove => 
+						<tr key={ glove.id }>
+							<td key={ glove.id }>{ glove.id }</td>
+							<td key={ glove.name }>{ glove.name }</td>
+							<td key={ glove.color }>{ glove.color.map( color => `${color} ` ) }</td>
+							<td key={ glove.manufacturer }>{ glove.manufacturer }</td>
+							<td key={ glove.price }>{ glove.price }</td>
 						</tr>
 					) }
 				</tbody>
