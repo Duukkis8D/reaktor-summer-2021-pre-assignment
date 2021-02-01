@@ -5,10 +5,10 @@ import axios from 'axios'
 class App extends React.Component {
 	constructor( props ) {
 		super( props )
-		//this.baseUrl = 'https://bad-api-assignment.reaktor.com/v2' CORS error occurs
-		this.baseUrl = 'https://bad-api-assignment.reaktor.com'
-		//this.glovesUrl = `${this.baseUrl}/products/gloves` CORS error occurs
-		this.glovesUrl = `${this.baseUrl}/products/jackets`
+		this.baseUrl = 'https://bad-api-assignment.reaktor.com/v2' // CORS error occurs
+		//this.baseUrl = 'https://bad-api-assignment.reaktor.com'
+		this.glovesUrl = `${this.baseUrl}/products/gloves` // CORS error occurs
+		//this.glovesUrl = `${this.baseUrl}/products/jackets`
 		this.state = {
 			gloves: [],
 			gloveManufacturers: [],
