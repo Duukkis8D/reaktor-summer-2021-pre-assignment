@@ -3,9 +3,9 @@ import axios from 'axios'
 
 // The app only gets glove data now.
 const App = () => {
-	const glovesUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com'
-	//const baseUrl = 'https://bad-api-assignment.reaktor.com' // old temp address
-	//const glovesUrl = `${baseUrl}/products/jackets` // old temp address
+	//const baseUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com'
+	//const glovesUrl = `${baseUrl}/api/products/gloves`
+	const glovesUrl = '/api/products/gloves'
 	const [ glovesArray, setGloves ] = useState( [] )
 	const [ gloveManufacturersArray, setGloveManufacturers ] = useState( [] )
 	//const [ gloveAvailability, setGloveAvailability ] = useState( Map )
