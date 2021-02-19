@@ -3,16 +3,30 @@ import axios from 'axios'
 
 // The app only gets glove data now.
 const App = () => {
-	//const baseUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com'
-	//const glovesUrl = `${baseUrl}/api/products/gloves`
+	const baseUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com'
+	const glovesUrl = `${baseUrl}/api/products/gloves`
 	//const glovesUrl = 'http://localhost:3001/api/products/gloves'
-	const glovesUrl = '/api/products/gloves'
+	//const glovesUrl = '/api/products/gloves'
 	const [ glovesArray, setGloves ] = useState( [] )
 	const [ gloveManufacturersArray, setGloveManufacturers ] = useState( [] )
 	//const [ gloveAvailability, setGloveAvailability ] = useState( Map )
 
 	// Gets all gloves.
 	useEffect( () => {
+		// Finds unique manufacturers from a long list with many duplicants.
+		const findManufacturers = gloves => {
+			const manufacturers = []
+			for ( let manufacturer of gloves ) {
+				if ( manufacturers.indexOf( manufacturer ) === -1 ) {
+					manufacturers.push( manufacturer )
+				}
+			}
+
+			console.log( 'gloveManufacturersArray from findManufacturers function: ', gloveManufacturersArray )
+	
+			return manufacturers
+		}
+		
 		axios
 			.get( glovesUrl )
 			.then( response => {
@@ -20,21 +34,10 @@ const App = () => {
 
 				setGloves( response.data )
 				setGloveManufacturers( allManufacturers )
-				console.log( gloveManufacturersArray ) // findManufacturers function is skipped?
+				// findManufacturers function is skipped on first render but executed by React hot loader later on?
+				console.log( 'gloveManufacturersArray from useEffect: ', gloveManufacturersArray )
 			} )
 	}, [] )
-
-	// Finds unique manufacturers from a long list with many duplicants.
-	const findManufacturers = gloves => {
-		const manufacturers = []
-		for ( let manufacturer of gloves ) {
-			if ( manufacturers.indexOf( manufacturer ) === -1 ) {
-				manufacturers.push( manufacturer )
-			}
-		}
-	
-		return manufacturers
-	}
 
 	/*
 	const gloveAvailabilityPromises = new Map()
