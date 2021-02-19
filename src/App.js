@@ -5,6 +5,7 @@ import axios from 'axios'
 const App = () => {
 	//const baseUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com'
 	//const glovesUrl = `${baseUrl}/api/products/gloves`
+	//const glovesUrl = 'http://localhost:3001/api/products/gloves'
 	const glovesUrl = '/api/products/gloves'
 	const [ glovesArray, setGloves ] = useState( [] )
 	const [ gloveManufacturersArray, setGloveManufacturers ] = useState( [] )
