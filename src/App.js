@@ -13,6 +13,8 @@ const App = () => {
 
 	// Gets all gloves.
 	useEffect( () => {
+		console.log( 'gloveManufacturersArray in the beginning of useEffect: ', gloveManufacturersArray )
+
 		// Finds unique manufacturers from a long list with many duplicants.
 		const findManufacturers = gloves => {
 			const manufacturers = []
@@ -21,8 +23,6 @@ const App = () => {
 					manufacturers.push( manufacturer )
 				}
 			}
-
-			console.log( 'gloveManufacturersArray from findManufacturers function: ', gloveManufacturersArray )
 	
 			return manufacturers
 		}
@@ -35,9 +35,11 @@ const App = () => {
 				setGloves( response.data )
 				setGloveManufacturers( allManufacturers )
 				// findManufacturers function is skipped on first render but executed by React hot loader later on?
-				console.log( 'gloveManufacturersArray from useEffect: ', gloveManufacturersArray )
+				console.log( 'gloveManufacturersArray after the server response and setters: ', gloveManufacturersArray )
 			} )
 	}, [] )
+
+	console.log( 'gloveManufacturersArray after useEffect: ', gloveManufacturersArray )
 
 	/*
 	const gloveAvailabilityPromises = new Map()
