@@ -34,7 +34,7 @@ const App = () => {
 
 				setGloves( response.data )
 				setGloveManufacturers( allManufacturers )
-				// findManufacturers function is skipped on first render but executed by React hot loader later on?
+				
 				console.log( 'gloveManufacturersArray after the server response and setters: ', gloveManufacturersArray )
 			} )
 	}, [] )
