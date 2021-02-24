@@ -20,8 +20,12 @@ module.exports = {
 	],
 	'rules': {
 		'indent': [
-			'error',
+			'warn',
 			'tab'
+		],
+		'no-mixed-spaces-and-tabs': [
+			'error',
+			'smart-tabs'
 		],
 		'linebreak-style': [
 			'error',
@@ -69,7 +73,7 @@ module.exports = {
 			'error',
 			'always'
 		],
-		'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
-		'react-hooks/exhaustive-deps': 'warn' // Checks effect dependencies
+		'react/prop-types': '0',
+		'react-hooks/rules-of-hooks': 'error' // Checks rules of Hooks
 	}
 }
