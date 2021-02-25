@@ -63,8 +63,8 @@ const App = () => {
 
 	console.log( 'productManufacturers after useEffect: ', productManufacturers )
 
-	const handleProductTypeChange = () => {
-		setProductType( 'gloves' )
+	const handleProductTypeChange = ( event ) => {
+		setProductType( event.target.value )
 	}
 
 	/*
@@ -97,7 +97,8 @@ const App = () => {
 
 	return (
 		<div>
-			<Filter handleProductTypeChange={ handleProductTypeChange }></Filter>
+			<h1>Product list</h1>
+			<Filter productType={ productType } handleProductTypeChange={ handleProductTypeChange }></Filter>
 			<ProductList products={ products }
 						 productType={ productType }></ProductList>
 		</div>
