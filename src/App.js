@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import ProductList from './components/ProductList'
 import productService from './services/productService'
+import './css/App.css'
 
 const App = () => {
 	const baseUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com/api'
@@ -46,12 +47,22 @@ const App = () => {
 		setProductType( event.target.value )
 	}
 
+	const renderIfThereIsProductData = () => {
+		if( typeof products !== 'undefined' && products.length > 0 ) {
+			return (
+				<div>
+					<Filter productType={ productType } handleProductTypeChange={ handleProductTypeChange }></Filter>
+					<ProductList products={ products }
+								 productType={ productType }></ProductList>
+				</div>
+			)
+		} else return <p>Loading product data. Please wait.</p>
+	}
+
 	return (
-		<div>
+		<div id='appContainer'>
 			<h1>Product list</h1>
-			<Filter productType={ productType } handleProductTypeChange={ handleProductTypeChange }></Filter>
-			<ProductList products={ products }
-						 productType={ productType }></ProductList>
+			{ renderIfThereIsProductData() }
 		</div>
 	)
 }

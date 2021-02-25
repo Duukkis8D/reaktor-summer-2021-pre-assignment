@@ -21,9 +21,7 @@ const ProductList = ( { products, productType } ) => {
 					</tbody>
 				</table>
 			)
-		} else {
-			return ( <p>Loading...</p> )
-		}
+		} else return // return nothing
 	}
 
 	const renderProducts = () => {
@@ -68,17 +66,11 @@ const ProductList = ( { products, productType } ) => {
 					</tr>
 				)
 			)
-		} else return <tr><td>Loading...</td></tr>
+		} else return <tr><td>Loading product data. Please wait.</td></tr>
 	}
 
-	/*
-    This table code should be in its own component ProductList. Product type (product, facemask or beanie) could
-    be passed as props to the component. Now only gloves get rendered and there is no availability information.
-    Product availability information could be found with using correct manufacturer in the HTTP request url and 
-    then searching with specific product id.
-    */
 	return (  
-		<div>
+		<div id='productListContainer'>
 			{ renderProductList() }
 		</div>
 	)
