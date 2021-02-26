@@ -14,16 +14,15 @@ html {
 
 h1 {
     font-size: 30px;
+    text-align: center;
 }
 
-#filterProductsContainer,
-#productListContainer {
-    background-color: lightgray;
+#filterProductsAndProductListContainer > * {
     padding: 10px;
 }
 
-#productListContainer {
-    background-color: initial;
+#filterProductsContainer {
+    background-color: lightgray;
 }
 
 table {

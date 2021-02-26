@@ -10,9 +10,7 @@ const App = () => {
 	const [ products, setProducts ] = useState( [] )
 	const [ productType, setProductType ] = useState ( '' )
 	const [ productManufacturers, setProductManufacturers ] = useState( [] )
-	//const [ gloveAvailability, setGloveAvailability ] = useState( Map )
-
-	// Gets all products.
+	// Gets all product data (except availability).
 	useEffect( () => {
 		console.log( 'productManufacturers in the beginning of useEffect: ', productManufacturers )
 
@@ -41,6 +39,27 @@ const App = () => {
 			} )
 	}, [] )
 
+	const [ productAvailabilities, setProductAvailabilities ] = useState( new Map() )
+	// Gets all product availability data.
+	useEffect( () => {
+		productService
+			.getProductAvailabilities( productManufacturers, baseUrl )
+			.then( response => {
+				const productAvailabilityData = new Map()
+
+				response.forEach( availabilities => {
+					productManufacturers.forEach( productManufacturer => {
+						productAvailabilityData.set( productManufacturer, availabilities.data )
+					} )
+	
+					console.log( 'product availability data of single manufacturer: ', availabilities.data )
+				} )
+
+				setProductAvailabilities( productAvailabilityData )
+				console.log( 'productAvailabilities Map object: ', productAvailabilities )
+			} )
+	}, [] )
+
 	console.log( 'productManufacturers after useEffect: ', productManufacturers )
 
 	const handleProductTypeChange = ( event ) => {
@@ -50,7 +69,7 @@ const App = () => {
 	const renderIfThereIsProductData = () => {
 		if( typeof products !== 'undefined' && products.length > 0 ) {
 			return (
-				<div>
+				<div id='filterProductsAndProductListContainer'>
 					<Filter productType={ productType } handleProductTypeChange={ handleProductTypeChange }></Filter>
 					<ProductList products={ products }
 								 productType={ productType }></ProductList>

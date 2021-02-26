@@ -20,32 +20,27 @@ const findManufacturers = productsArray => {
 	return manufacturers
 }
 
-/*
-const gloveAvailabilityPromises = new Map()
-const gloveAvailability = gloveManufacturers => {  
-	gloveManufacturers.forEach( manufacturer => {
-		gloveAvailabilityPromises.set( manufacturer, axios.get( `${this.baseUrl}/availability/${manufacturer}` ) )
-		console.log( manufacturer )
+const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
+	const productAvailabilityPromises = []
+
+	productManufacturers.forEach( productManufacturer => {
+		/*
+		The order of manufacturers in productManufacturers array
+		is preserved in the new productAvailabilityPromises array.
+		*/
+		productAvailabilityPromises.push( 
+			axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
+		)
+		console.log( 'product manufacturer from getProductAvailabilityPromises function: ', productManufacturer )
 	} )
 
-	return gloveAvailabilityPromises
+	console.log( 'productAvailabilityPromises Array object: ', productAvailabilityPromises )
+
+	return productAvailabilityPromises
 }
-*/
 
-// How to keep manufacturer information during HTTP requests? I need to know which HTTP response is for which
-// manufacturer. Perhaps copying the keys from gloveAvailabilityPromises Map to gloveAvailabilityData Map...
-/*
-const gloveAvailabilityData = new Map()
-Promise
-	.all( gloveAvailability( this.state.gloveManufacturers ) )
-	.then( results => {
-		results.forEach( response => {
-			console.log( response.data )
-			gloveAvailabilityData.set( response.data )
-		} )
-	} )
-*/
+const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
+	return Promise.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
+}
 
-// Then set availability data to App state. No code yet...
-
-export default { getProducts, findManufacturers }
+export default { getProducts, findManufacturers, getProductAvailabilities }
