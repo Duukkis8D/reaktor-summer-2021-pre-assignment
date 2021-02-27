@@ -47,20 +47,31 @@ const App = () => {
 		productService
 			.getProductAvailabilities( productManufacturers, baseUrl )
 			.then( response => {
+				// For some reason, the same data is set six times to the following Map object.
 				const productAvailabilityData = new Map()
 
 				response.forEach( availabilities => {
 					productManufacturers.forEach( productManufacturer => {
+						console.log( 'response.forEach( availabilities => { productManufacturers.forEach( productManufacturer => {',
+							'response: ', 
+							response,
+							'response.data: ',
+							response.data,
+							'availabilities: ',
+							availabilities,
+							'availabilities.data: ',
+							availabilities.data,
+							'productManufacturer: ',
+							productManufacturer
+						)
 						productAvailabilityData.set( productManufacturer, availabilities.data )
 					} )
-	
-					console.log( 'product availability data of single manufacturer: ', availabilities.data )
 				} )
 
 				setProductAvailabilities( productAvailabilityData )
 				console.log( 'productAvailabilities Map object: ', productAvailabilities )
 			} )
-	}, [] )
+	}, [ productManufacturers ] )
 
 	const handleProductTypeChange = ( event ) => {
 		setProductType( event.target.value )
