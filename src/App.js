@@ -39,6 +39,8 @@ const App = () => {
 			} )
 	}, [] )
 
+	console.log( 'productManufacturers after useEffect: ', productManufacturers )
+
 	const [ productAvailabilities, setProductAvailabilities ] = useState( new Map() )
 	// Gets all product availability data.
 	useEffect( () => {
@@ -59,8 +61,6 @@ const App = () => {
 				console.log( 'productAvailabilities Map object: ', productAvailabilities )
 			} )
 	}, [] )
-
-	console.log( 'productManufacturers after useEffect: ', productManufacturers )
 
 	const handleProductTypeChange = ( event ) => {
 		setProductType( event.target.value )
