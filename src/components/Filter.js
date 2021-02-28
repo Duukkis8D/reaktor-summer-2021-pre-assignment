@@ -3,8 +3,8 @@ import React from 'react'
 const Filter = ( { productType, handleProductTypeChange } ) => {
 	return (
 		<div id='filterProductsContainer'>
-			<p>Show products belonging to category</p>
-			<label htmlFor='products'>Please select an option</label><br></br>
+			<h2>Shows products by category type</h2>
+			<label htmlFor='products'>Please select an option. It takes some time for the selection to take affect.</label><br></br>
 			<select name='products' onChange={ handleProductTypeChange } value={ productType }>
 				<option defaultValue disabled hidden style={ { display: 'none' } } value=''></option>
 				<option value='gloves'>gloves</option>

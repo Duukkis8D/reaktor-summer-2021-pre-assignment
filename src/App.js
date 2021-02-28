@@ -47,7 +47,7 @@ const App = () => {
 		productService
 			.getProductAvailabilities( productManufacturers, baseUrl )
 			.then( response => {
-				// For some reason, the same data is set six times to the following Map object.
+				// For some reason, there is no actual data in server response.
 				const productAvailabilityData = new Map()
 
 				response.forEach( availabilities => {
