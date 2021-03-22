@@ -4,7 +4,7 @@
 
 The app is for Reaktor developer summer 2021 job application. It is meant to test the applicant's programming and problem solving skills.
 
-Instructions for the pre-assignment: https://www.reaktor.com/careers/developer-summer-2021-4995601002/.
+Instructions for the pre-assignment: https://www.reaktor.com/junior-dev-assignment/.
 
 ## Function
 
