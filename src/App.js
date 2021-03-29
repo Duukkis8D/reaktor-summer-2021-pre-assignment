@@ -17,6 +17,15 @@ const App = () => {
 		productService
 			.getProducts( baseUrl )
 			.then( response => {
+				/*
+				Move some of the code to productService. Check this:
+				https://fullstackopen.com/osa2/palvelimella_olevan_datan_muokkaaminen
+				const getAll = () => {
+					const request = axios.get(baseUrl)
+					return request.then(response => response.data)
+				}
+				... and so on.
+				*/
 				console.log( 'all products (headers, data etc):', response )
 
 				const allProducts = []
