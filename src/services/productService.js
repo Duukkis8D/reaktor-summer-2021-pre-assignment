@@ -39,8 +39,31 @@ const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 	return productAvailabilityPromises
 }
 
+const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityData ) => {
+	const productAvailabilityMap = new Map()
+
+	for( let i = 0; i < productManufacturers.length; i++ ) {
+		productAvailabilityMap.set( productManufacturers[ i ], productAvailabilityData[ i ] )
+	}
+
+	// There is no values in Map object for some reason, only keys.
+	console.log( 'productAvailabilityMap (keys, values):', productAvailabilityMap )
+	return productAvailabilityMap
+}
+
 const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
-	return Promise.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
+	return Promise
+		.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
+		.then( serverResponse => {
+			console.log( 
+				'product availability serverResponse from getProductAvailabilities function:', serverResponse,
+				'product availability serverResponse.data from getProductAvailabilities function:', serverResponse.data 
+			)
+			return serverResponse.data
+		} )
+		.then( productAvailabilityData => {
+			return buildProductAvailabilityMap( productManufacturers, productAvailabilityData.response )
+		} )
 }
 
 export default { getProducts, findManufacturers, getProductAvailabilities }

@@ -5,7 +5,7 @@ import productService from './services/productService'
 import './css/App.css'
 
 const App = () => {
-	const baseUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com/api'
+	const baseUrl = 'http://localhost:3001/api'
 	
 	const [ products, setProducts ] = useState( [] )
 	const [ productType, setProductType ] = useState ( '' )
@@ -53,33 +53,13 @@ const App = () => {
 	const [ productAvailabilities, setProductAvailabilities ] = useState( new Map() )
 	// Gets all product availability data.
 	useEffect( () => {
-		productService
+		const productAvailabilityData = productService
 			.getProductAvailabilities( productManufacturers, baseUrl )
-			.then( response => {
-				// For some reason, there is no actual data in server response.
-				const productAvailabilityData = new Map()
+		console.log( 'productAvailabilityData from useEffect:', productAvailabilityData )
 
-				response.forEach( availabilities => {
-					productManufacturers.forEach( productManufacturer => {
-						console.log( 'response.forEach( availabilities => { productManufacturers.forEach( productManufacturer => {',
-							'response: ', 
-							response,
-							'response.data: ',
-							response.data,
-							'availabilities: ',
-							availabilities,
-							'availabilities.data: ',
-							availabilities.data,
-							'productManufacturer: ',
-							productManufacturer
-						)
-						productAvailabilityData.set( productManufacturer, availabilities.data )
-					} )
-				} )
-
-				setProductAvailabilities( productAvailabilityData )
-				console.log( 'productAvailabilities Map object: ', productAvailabilities )
-			} )
+		// Should setProductAvailabilities be in 'then' function in the same way than in productService.getProducts?
+		setProductAvailabilities( productAvailabilityData )
+		console.log( 'productAvailabilities Map object in state: ', productAvailabilities )
 	}, [ productManufacturers ] )
 
 	const handleProductTypeChange = ( event ) => {
