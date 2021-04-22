@@ -12,7 +12,7 @@ const App = () => {
 	const [ productManufacturers, setProductManufacturers ] = useState( [] )
 	// Gets all product data (except availability).
 	useEffect( () => {
-		console.log( 'productManufacturers in the beginning of useEffect: ', productManufacturers )
+		//console.log( 'productManufacturers in the beginning of useEffect: ', productManufacturers )
 
 		productService
 			.getProducts( baseUrl )
@@ -26,7 +26,7 @@ const App = () => {
 				}
 				... and so on.
 				*/
-				console.log( 'all products (headers, data etc):', response )
+				//console.log( 'all products (headers, data etc):', response )
 
 				const allProducts = []
 
@@ -34,7 +34,7 @@ const App = () => {
 					allProducts.push( products.data )
 				} )
 
-				console.log( 'all products (only data):', allProducts )
+				//console.log( 'all products (only data):', allProducts )
 
 				// allProducts contains [0]: gloves, [1]: facemasks, [2]: beanies
 				setProducts( allProducts )
@@ -44,21 +44,21 @@ const App = () => {
 					[].concat( ...allProducts ).map( product => product.manufacturer ) )
 				setProductManufacturers( allManufacturers )
 
-				console.log( 'productManufacturers after the server response and setters: ', productManufacturers )
+				//console.log( 'productManufacturers after the server response and setters: ', productManufacturers )
 			} )
 	}, [] )
 
-	console.log( 'productManufacturers after useEffect: ', productManufacturers )
+	//console.log( 'productManufacturers after useEffect: ', productManufacturers )
 
 	const [ productAvailabilities, setProductAvailabilities ] = useState( new Map() )
 	// Gets all product availability data.
 	useEffect( () => {
-		const productAvailabilityData = productService
+		productService
 			.getProductAvailabilities( productManufacturers, baseUrl )
-		console.log( 'productAvailabilityData from useEffect:', productAvailabilityData )
+			.then( availabilityData => {
+				setProductAvailabilities( availabilityData )
+			} )
 
-		// Should setProductAvailabilities be in 'then' function in the same way than in productService.getProducts?
-		setProductAvailabilities( productAvailabilityData )
 		console.log( 'productAvailabilities Map object in state: ', productAvailabilities )
 	}, [ productManufacturers ] )
 

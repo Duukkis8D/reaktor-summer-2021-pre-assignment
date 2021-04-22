@@ -31,22 +31,26 @@ const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 		productAvailabilityPromises.push( 
 			axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
 		)
-		console.log( 'product manufacturer from getProductAvailabilityPromises function: ', productManufacturer )
+		//console.log( 'product manufacturer from getProductAvailabilityPromises function: ', productManufacturer )
 	} )
 
-	console.log( 'productAvailabilityPromises Array object: ', productAvailabilityPromises )
+	//console.log( 'productAvailabilityPromises Array object: ', productAvailabilityPromises )
 
 	return productAvailabilityPromises
 }
 
 const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityData ) => {
+	console.log( 
+		'productAvailabilityData (response field) from buildProductAvailabilityMap function:', 
+		productAvailabilityData 
+	)
+
 	const productAvailabilityMap = new Map()
 
 	for( let i = 0; i < productManufacturers.length; i++ ) {
 		productAvailabilityMap.set( productManufacturers[ i ], productAvailabilityData[ i ] )
 	}
 
-	// There is no values in Map object for some reason, only keys.
 	console.log( 'productAvailabilityMap (keys, values):', productAvailabilityMap )
 	return productAvailabilityMap
 }
@@ -56,13 +60,17 @@ const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
 		.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
 		.then( serverResponse => {
 			console.log( 
-				'product availability serverResponse from getProductAvailabilities function:', serverResponse,
-				'product availability serverResponse.data from getProductAvailabilities function:', serverResponse.data 
+				'product availability serverResponse from getProductAvailabilities function:', 
+				serverResponse
 			)
-			return serverResponse.data
+			return serverResponse.map( response => response.data )
 		} )
 		.then( productAvailabilityData => {
-			return buildProductAvailabilityMap( productManufacturers, productAvailabilityData.response )
+			console.log( 
+				'product availability serverResponse data field from getProductAvailabilities function:', 
+				productAvailabilityData 
+			)
+			return buildProductAvailabilityMap( productManufacturers, productAvailabilityData.map( data => data.response ) )
 		} )
 }
 
