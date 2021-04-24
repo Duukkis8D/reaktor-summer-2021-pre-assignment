@@ -8,29 +8,14 @@ const getProducts = ( baseUrl ) => {
 			axios.get( baseUrl, { params: { category: 'beanies' } } )
 		] )
 		.then( response => {
-			/*
-			Move some of the code to productService. Check this:
-			https://fullstackopen.com/osa2/palvelimella_olevan_datan_muokkaaminen
-			const getAll = () => {
-				const request = axios.get(baseUrl)
-				return request.then(response => response.data)
-			}
-			... and so on.
-			*/
-			//console.log( 'all products (headers, data etc):', response )
+			console.log( 'all products (headers, data etc):', response )
 
-			const allProducts = []
+			const allProducts = response.map( products => products.data )
 
-			response.forEach( products => {
-				allProducts.push( products.data )
-			} )
-
-			//console.log( 'all products (only data):', allProducts )
+			console.log( 'all products (only data):', allProducts )
 
 			// allProducts contains [0]: gloves, [1]: facemasks, [2]: beanies
 			return allProducts
-
-			//console.log( 'productManufacturers after the server response and setters: ', productManufacturers )
 		} )
 }
 
