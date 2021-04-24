@@ -4,7 +4,9 @@ const Filter = ( { productType, handleProductTypeChange } ) => {
 	return (
 		<div id='filterProductsContainer'>
 			<h2>Shows products by category type</h2>
-			<label htmlFor='products'>Please select a category. It takes some time for the selection to take effect.</label><br></br>
+			<label htmlFor='products'>
+				Please select a category. It takes some time for the selection to take effect.
+			</label><br></br>
 			<select name='products' onChange={ handleProductTypeChange } value={ productType }>
 				<option defaultValue disabled hidden style={ { display: 'none' } } value=''></option>
 				<option value='gloves'>gloves</option>
