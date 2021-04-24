@@ -16,35 +16,13 @@ const App = () => {
 
 		productService
 			.getProducts( baseUrl )
-			.then( response => {
-				/*
-				Move some of the code to productService. Check this:
-				https://fullstackopen.com/osa2/palvelimella_olevan_datan_muokkaaminen
-				const getAll = () => {
-					const request = axios.get(baseUrl)
-					return request.then(response => response.data)
-				}
-				... and so on.
-				*/
-				//console.log( 'all products (headers, data etc):', response )
+			.then( productData => {
+				setProducts( productData )
 
-				const allProducts = []
-
-				response.forEach( products => {
-					allProducts.push( products.data )
-				} )
-
-				//console.log( 'all products (only data):', allProducts )
-
-				// allProducts contains [0]: gloves, [1]: facemasks, [2]: beanies
-				setProducts( allProducts )
-
-				// Spreading 2-dimensional array to 1 dimension.
-				const allManufacturers = productService.findManufacturers( 
-					[].concat( ...allProducts ).map( product => product.manufacturer ) )
-				setProductManufacturers( allManufacturers )
-
-				//console.log( 'productManufacturers after the server response and setters: ', productManufacturers )
+				// Spreads 2-dimensional array to 1 dimension, filters out other than product manufacturer data
+				// and passes the result to findManufacturers function.
+				setProductManufacturers( productService.findManufacturers( 
+					[].concat( ...productData ).map( product => product.manufacturer ) ) )
 			} )
 	}, [] )
 
