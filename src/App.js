@@ -70,7 +70,8 @@ const App = () => {
 		if( typeof products !== 'undefined' && products.length > 0 ) {
 			return (
 				<div id='filterProductsAndProductListContainer'>
-					<Filter productType={ productType } handleProductTypeChange={ handleProductTypeChange }></Filter>
+					<Filter productType={ productType }
+						    handleProductTypeChange={ handleProductTypeChange }></Filter>
 					<ProductList products={ products }
 								 productType={ productType }></ProductList>
 				</div>
