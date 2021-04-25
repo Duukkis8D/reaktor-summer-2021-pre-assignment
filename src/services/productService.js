@@ -32,20 +32,9 @@ const findManufacturers = productsArray => {
 }
 
 const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
-	const productAvailabilityPromises = []
-
-	productManufacturers.forEach( productManufacturer => {
-		/*
-		The order of manufacturers in productManufacturers array
-		is preserved in the new productAvailabilityPromises array.
-		*/
-		productAvailabilityPromises.push( 
-			axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
-		)
-		//console.log( 'product manufacturer from getProductAvailabilityPromises function: ', productManufacturer )
+	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
+		return axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
 	} )
-
-	//console.log( 'productAvailabilityPromises Array object: ', productAvailabilityPromises )
 
 	return productAvailabilityPromises
 }
