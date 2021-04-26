@@ -40,6 +40,16 @@ const App = () => {
 		console.log( 'productAvailabilities Map object in state: ', productAvailabilities )
 	}, [ productManufacturers ] )
 
+	const [ productsAndAvailabilities, setProductsAndAvailabilities ] = useState( [] )
+	// Merges product and availability information.
+	useEffect( () => {
+		productService
+			.buildCompleteProductList( products, productAvailabilities )
+			.then( productData => {
+				setProductsAndAvailabilities( productData )
+			} )
+	}, [ products, productAvailabilities ] )
+
 	const handleProductTypeChange = ( event ) => {
 		setProductType( event.target.value )
 	}
@@ -51,6 +61,7 @@ const App = () => {
 					<Filter productType={ productType }
 						    handleProductTypeChange={ handleProductTypeChange }></Filter>
 					<ProductList products={ products }
+								 productsAndAvailabilities={ productsAndAvailabilities }
 								 productType={ productType }></ProductList>
 				</div>
 			)

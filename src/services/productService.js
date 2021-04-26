@@ -55,9 +55,43 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 	return productAvailabilityMap
 }
 
-/* const buildCompleteProductList = ( products, productAvailabilities ) => {
+const buildCompleteProductList = ( products, productAvailabilities ) => {
+	/*
+	How to nest map functions: 
+	var array = [[1, 2], [3, 4]];
+	var double = x => x * 2;
+	var doubledArray = array.map( subarray => subarray.map( double ));
+	
+	const addAvailabilityInfo = ( product ) => {
+		return (
+			product.map( product => {
+				return (
+					<tr key={ product.id }>
+						<td key={ product.id }>{ product.id }</td>
+						<td key={ product.type }>{ product.type }</td>
+						<td key={ product.name }>{ product.name }</td>
+						<td key={ product.color }>{ product.color.map( color => `${color} ` ) }</td>
+						<td key={ product.manufacturer }>{ product.manufacturer }</td>
+						<td key={ product.price }>{ product.price }</td>
+						<td key={ product.availability }>{ productAvailabilities
+							.get( product.manufacturer )
+							.filter( id => id === product.id )
+							.map( productAvailabilityInfo => {
+								return productAvailabilityInfo
+									.DATAPAYLOAD
+									.substring( DATAPAYLOAD.search( <INSTOCKVALUE> ), DATAPAYLOAD.search( </INSTOCKVALUE> ) )
+							} ) }
+						</td>
+					</tr>
+			) } )
+		)
+	}
 
-} */
+	return products.map( productList => {
+		productList.map( addAvailabilityInfo )
+	} )
+	*/
+}
 
 const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
 	return Promise
@@ -78,4 +112,4 @@ const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
 		} )
 }
 
-export default { getProducts, findManufacturers, getProductAvailabilities }
+export default { getProducts, findManufacturers, buildCompleteProductList, getProductAvailabilities }
