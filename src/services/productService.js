@@ -1,3 +1,4 @@
+import React from 'react'
 import axios from 'axios'
 
 const getProducts = ( baseUrl ) => {
@@ -28,6 +29,7 @@ const findManufacturers = productsArray => {
 		}
 	}
 
+	console.log( 'manufacturers in findManufacturers function:', manufacturers )
 	return manufacturers
 }
 
@@ -56,41 +58,49 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 }
 
 const buildCompleteProductList = ( products, productAvailabilities ) => {
+	console.log( 'productAvailabilities in buildCompleteProductList function:', productAvailabilities )
+
 	/*
 	How to nest map functions: 
 	var array = [[1, 2], [3, 4]];
 	var double = x => x * 2;
 	var doubledArray = array.map( subarray => subarray.map( double ));
-	
+	*/
+
 	const addAvailabilityInfo = ( product ) => {
+		console.log( 'product in buildCompleteProductList function:', product )
+		console.log(
+			'productAvailabilities.get( product.manufacturer ) in addAvailabilityInfo function:',
+			productAvailabilities.get( product.manufacturer )
+		)
+		
 		return (
-			product.map( product => {
-				return (
-					<tr key={ product.id }>
-						<td key={ product.id }>{ product.id }</td>
-						<td key={ product.type }>{ product.type }</td>
-						<td key={ product.name }>{ product.name }</td>
-						<td key={ product.color }>{ product.color.map( color => `${color} ` ) }</td>
-						<td key={ product.manufacturer }>{ product.manufacturer }</td>
-						<td key={ product.price }>{ product.price }</td>
-						<td key={ product.availability }>{ productAvailabilities
-							.get( product.manufacturer )
-							.filter( id => id === product.id )
-							.map( productAvailabilityInfo => {
-								return productAvailabilityInfo
-									.DATAPAYLOAD
-									.substring( DATAPAYLOAD.search( <INSTOCKVALUE> ), DATAPAYLOAD.search( </INSTOCKVALUE> ) )
-							} ) }
-						</td>
-					</tr>
-			) } )
+			<tr key={ product.id }>
+				<td key={ product.id }>{ product.id }</td>
+				<td key={ product.type }>{ product.type }</td>
+				<td key={ product.name }>{ product.name }</td>
+				<td key={ product.color }>{ product.color.map( color => `${color} ` ) }</td>
+				<td key={ product.manufacturer }>{ product.manufacturer }</td>
+				<td key={ product.price }>{ product.price }</td>
+				<td key={ product.availability }>{ productAvailabilities
+					.get( product.manufacturer )
+					.filter( id => id === product.id )
+					.map( productAvailabilityInfo => {
+						return productAvailabilityInfo
+							.DATAPAYLOAD
+							.substring(
+								productAvailabilityInfo.DATAPAYLOAD.search( '<INSTOCKVALUE>' ),
+								productAvailabilityInfo.DATAPAYLOAD.search( '</INSTOCKVALUE>' )
+							)
+					} ) }
+				</td>
+			</tr>
 		)
 	}
 
 	return products.map( productList => {
 		productList.map( addAvailabilityInfo )
 	} )
-	*/
 }
 
 const getProductAvailabilities = ( productManufacturers, baseUrl ) => {

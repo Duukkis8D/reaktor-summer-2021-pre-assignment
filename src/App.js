@@ -26,11 +26,15 @@ const App = () => {
 			} )
 	}, [] )
 
-	//console.log( 'productManufacturers after useEffect: ', productManufacturers )
+	console.log( 'productManufacturers after useEffect: ', productManufacturers )
 
 	const [ productAvailabilities, setProductAvailabilities ] = useState( new Map() )
 	// Gets all product availability data.
 	useEffect( () => {
+		//if( productService
+		//	.getProductAvailabilities( productManufacturers, baseUrl ) )
+		// ...contains an empty array, do that request again.
+
 		productService
 			.getProductAvailabilities( productManufacturers, baseUrl )
 			.then( availabilityData => {
@@ -42,13 +46,11 @@ const App = () => {
 
 	const [ productsAndAvailabilities, setProductsAndAvailabilities ] = useState( [] )
 	// Merges product and availability information.
-	useEffect( () => {
-		productService
+	useEffect( () => {	
+		setProductsAndAvailabilities( productService
 			.buildCompleteProductList( products, productAvailabilities )
-			.then( productData => {
-				setProductsAndAvailabilities( productData )
-			} )
-	}, [ products, productAvailabilities ] )
+		)
+	}, [ productAvailabilities ] )
 
 	const handleProductTypeChange = ( event ) => {
 		setProductType( event.target.value )
