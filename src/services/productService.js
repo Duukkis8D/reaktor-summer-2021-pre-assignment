@@ -41,6 +41,10 @@ const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 	return productAvailabilityPromises
 }
 
+const getProductAvailabilityPromise = ( productManufacturer, baseUrl ) => {
+	return axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
+}
+
 const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityData ) => {
 	console.log( 
 		'productAvailabilityData (response field) from buildProductAvailabilityMap function:', 
@@ -57,23 +61,35 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 	return productAvailabilityMap
 }
 
+const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
+	const productAvailabilities = Promise
+		.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
+		.then( serverResponse => {
+			console.log( 
+				'product availability serverResponse from getProductAvailabilities function:', 
+				serverResponse
+			)
+			return serverResponse.map( response => response.data )
+		} )
+		.then( productAvailabilityData => {
+			console.log( 
+				'product availability serverResponse data field from getProductAvailabilities function:', 
+				productAvailabilityData 
+			)
+			return buildProductAvailabilityMap( productManufacturers, productAvailabilityData.map( data => data.response ) )
+		} )
+
+	/*productAvailabilities.forEach( ( availabilityData, manufacturer ) => {
+		if( availabilityData.length < 1 ) {
+
+		}
+	} )*/
+}
+
 const buildCompleteProductList = ( products, productAvailabilities ) => {
 	console.log( 'productAvailabilities in buildCompleteProductList function:', productAvailabilities )
 
-	/*
-	How to nest map functions: 
-	var array = [[1, 2], [3, 4]];
-	var double = x => x * 2;
-	var doubledArray = array.map( subarray => subarray.map( double ));
-	*/
-
 	const addAvailabilityInfo = ( product ) => {
-		console.log( 'product in buildCompleteProductList function:', product )
-		console.log(
-			'productAvailabilities.get( product.manufacturer ) in addAvailabilityInfo function:',
-			productAvailabilities.get( product.manufacturer )
-		)
-		
 		return (
 			<tr key={ product.id }>
 				<td key={ product.id }>{ product.id }</td>
@@ -101,25 +117,6 @@ const buildCompleteProductList = ( products, productAvailabilities ) => {
 	return products.map( productList => {
 		productList.map( addAvailabilityInfo )
 	} )
-}
-
-const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
-	return Promise
-		.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
-		.then( serverResponse => {
-			console.log( 
-				'product availability serverResponse from getProductAvailabilities function:', 
-				serverResponse
-			)
-			return serverResponse.map( response => response.data )
-		} )
-		.then( productAvailabilityData => {
-			console.log( 
-				'product availability serverResponse data field from getProductAvailabilities function:', 
-				productAvailabilityData 
-			)
-			return buildProductAvailabilityMap( productManufacturers, productAvailabilityData.map( data => data.response ) )
-		} )
 }
 
 export default { getProducts, findManufacturers, buildCompleteProductList, getProductAvailabilities }
