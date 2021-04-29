@@ -35,14 +35,28 @@ const findManufacturers = productsArray => {
 
 const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
-		return axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
+		return new Promise( ( resolve, reject ) => { 
+			const promise = axios
+				.get( baseUrl, { params: { manufacturer: productManufacturer } } )
+				.then( serverResponse => {
+					console.log(
+						'serverResponse.data.response from getProductAvailabilityPromises function:', 
+						serverResponse.data.response
+					)
+					return serverResponse.data.response
+				} )
+
+			if( promise.length > 0 ) {
+				console.log( productManufacturer, 'resolved' )
+				resolve( promise )
+			} else if( promise.length === 0 ) {
+				console.log( productManufacturer, 'rejected' )
+				reject( axios.get( baseUrl, { params: { manufacturer: productManufacturer } } ) )
+			} else throw 'Error occurred.'
+		} )
 	} )
 
 	return productAvailabilityPromises
-}
-
-const getProductAvailabilityPromise = ( productManufacturer, baseUrl ) => {
-	return axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
 }
 
 const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityData ) => {
@@ -62,6 +76,7 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 }
 
 const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
+	/*
 	const productAvailabilities = Promise
 		.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
 		.then( serverResponse => {
@@ -78,12 +93,9 @@ const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
 			)
 			return buildProductAvailabilityMap( productManufacturers, productAvailabilityData.map( data => data.response ) )
 		} )
-
-	/*productAvailabilities.forEach( ( availabilityData, manufacturer ) => {
-		if( availabilityData.length < 1 ) {
-
-		}
-	} )*/
+	*/
+	const productAvailabilities = Promise.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
+	return buildProductAvailabilityMap( productManufacturers, productAvailabilities )
 }
 
 const buildCompleteProductList = ( products, productAvailabilities ) => {

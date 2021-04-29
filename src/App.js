@@ -31,15 +31,9 @@ const App = () => {
 	const [ productAvailabilities, setProductAvailabilities ] = useState( new Map() )
 	// Gets all product availability data.
 	useEffect( () => {
-		//if( productService
-		//	.getProductAvailabilities( productManufacturers, baseUrl ) )
-		// ...contains an empty array, do that request again.
-
-		productService
+		const productAvailabilityData = productService
 			.getProductAvailabilities( productManufacturers, baseUrl )
-			.then( availabilityData => {
-				setProductAvailabilities( availabilityData )
-			} )
+		setProductAvailabilities( productAvailabilityData )
 
 		console.log( 'productAvailabilities Map object in state: ', productAvailabilities )
 	}, [ productManufacturers ] )
