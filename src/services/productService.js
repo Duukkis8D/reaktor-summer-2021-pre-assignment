@@ -36,22 +36,26 @@ const findManufacturers = productsArray => {
 const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
 		return new Promise( ( resolve, reject ) => { 
-			const promise = axios
+			const getProductAvailabilities = axios
 				.get( baseUrl, { params: { manufacturer: productManufacturer } } )
 				.then( serverResponse => {
 					console.log(
 						'serverResponse.data.response from getProductAvailabilityPromises function:', 
 						serverResponse.data.response
 					)
-					return serverResponse.data.response
-				} )
 
-			if( promise.length > 0 ) {
-				console.log( productManufacturer, 'resolved' )
-				resolve( promise )
-			} else if( promise.length === 0 ) {
-				console.log( productManufacturer, 'rejected' )
-				reject( axios.get( baseUrl, { params: { manufacturer: productManufacturer } } ) )
+					const productAvailabilityData = serverResponse.data.response
+					return productAvailabilityData
+				} )
+			
+			if( getProductAvailabilities.length > 2 ) {
+				console.log( 'productAvailabilityData.length:', getProductAvailabilities.length,
+					productManufacturer, 'resolved' )
+				resolve( getProductAvailabilities )
+			} else if( getProductAvailabilities.length <= 2 ) {
+				console.log( 'productAvailabilityData.length:', getProductAvailabilities.length,
+					productManufacturer, 'rejected' )
+				reject( getProductAvailabilities )
 			} else throw 'Error occurred.'
 		} )
 	} )
