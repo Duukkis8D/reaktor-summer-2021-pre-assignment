@@ -34,31 +34,35 @@ const findManufacturers = productsArray => {
 }
 
 const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
-	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
-		return new Promise( ( resolve, reject ) => { 
-			const getProductAvailabilities = axios
-				.get( baseUrl, { params: { manufacturer: productManufacturer } } )
-				.then( serverResponse => {
-					console.log(
-						'serverResponse.data.response from getProductAvailabilityPromises function:', 
-						serverResponse.data.response
-					)
+	const createProductAvailabilityPromise = ( productManufacturer ) => {
+		axios
+			.get( baseUrl, { params: { manufacturer: productManufacturer } } )
+			.then( serverResponse => {
+				const productAvailabilityData = serverResponse.data.response
+				console.log(
+					'productAvailabilityData from createProductAvailabilityPromise function:', 
+					productAvailabilityData
+				)
 
-					const productAvailabilityData = serverResponse.data.response
+				if( productAvailabilityData.length > 2 ) {
+					console.log( 'productAvailabilityData.length:', productAvailabilityData.length,
+						productManufacturer, 'valid server response' )
 					return productAvailabilityData
-				} )
-			
-			if( getProductAvailabilities.length > 2 ) {
-				console.log( 'productAvailabilityData.length:', getProductAvailabilities.length,
-					productManufacturer, 'resolved' )
-				resolve( getProductAvailabilities )
-			} else if( getProductAvailabilities.length <= 2 ) {
-				console.log( 'productAvailabilityData.length:', getProductAvailabilities.length,
-					productManufacturer, 'rejected' )
-				reject( getProductAvailabilities )
-			} else throw 'Error occurred.'
-		} )
+				} else if( productAvailabilityData.length <= 2 ) {
+					console.log( 'productAvailabilityData.length:', productAvailabilityData.length,
+						productManufacturer, 'invalid server response' )
+					createProductAvailabilityPromise( productManufacturer )
+				} else throw 'Error occurred.'
+			} )
+	}
+
+	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
+		createProductAvailabilityPromise( productManufacturer )
 	} )
+	console.log( 
+		'productAvailabilityPromises in getProductAvailabilityPromises function:', 
+		productAvailabilityPromises 
+	)
 
 	return productAvailabilityPromises
 }
@@ -80,25 +84,7 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 }
 
 const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
-	/*
-	const productAvailabilities = Promise
-		.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
-		.then( serverResponse => {
-			console.log( 
-				'product availability serverResponse from getProductAvailabilities function:', 
-				serverResponse
-			)
-			return serverResponse.map( response => response.data )
-		} )
-		.then( productAvailabilityData => {
-			console.log( 
-				'product availability serverResponse data field from getProductAvailabilities function:', 
-				productAvailabilityData 
-			)
-			return buildProductAvailabilityMap( productManufacturers, productAvailabilityData.map( data => data.response ) )
-		} )
-	*/
-	const productAvailabilities = Promise.all( getProductAvailabilityPromises( productManufacturers, baseUrl ) )
+	const productAvailabilities = getProductAvailabilityPromises( productManufacturers, baseUrl )
 	return buildProductAvailabilityMap( productManufacturers, productAvailabilities )
 }
 
