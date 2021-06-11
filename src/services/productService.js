@@ -9,10 +9,7 @@ const getProducts = ( baseUrl ) => {
 			axios.get( baseUrl, { params: { category: 'beanies' } } )
 		] )
 		.then( response => {
-			console.log( 'all products (headers, data etc):', response )
-
-			const allProducts = response.map( products => products.data )
-
+			const allProducts = response.map( response => response.data )
 			console.log( 'all products (only data):', allProducts )
 
 			// allProducts contains [0]: gloves, [1]: facemasks, [2]: beanies
@@ -33,40 +30,6 @@ const findManufacturers = productsArray => {
 	return manufacturers
 }
 
-const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
-	const createProductAvailabilityPromise = ( productManufacturer ) => {
-		axios
-			.get( baseUrl, { params: { manufacturer: productManufacturer } } )
-			.then( serverResponse => {
-				const productAvailabilityData = serverResponse.data.response
-				console.log(
-					'productAvailabilityData from createProductAvailabilityPromise function:', 
-					productAvailabilityData
-				)
-
-				if( productAvailabilityData.length > 2 ) {
-					console.log( 'productAvailabilityData.length:', productAvailabilityData.length,
-						productManufacturer, 'valid server response' )
-					return productAvailabilityData
-				} else if( productAvailabilityData.length <= 2 ) {
-					console.log( 'productAvailabilityData.length:', productAvailabilityData.length,
-						productManufacturer, 'invalid server response' )
-					createProductAvailabilityPromise( productManufacturer )
-				} else throw 'Error occurred.'
-			} )
-	}
-
-	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
-		createProductAvailabilityPromise( productManufacturer )
-	} )
-	console.log( 
-		'productAvailabilityPromises in getProductAvailabilityPromises function:', 
-		productAvailabilityPromises 
-	)
-
-	return productAvailabilityPromises
-}
-
 const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityData ) => {
 	console.log( 
 		'productAvailabilityData (response field) from buildProductAvailabilityMap function:', 
@@ -84,8 +47,27 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 }
 
 const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
-	const productAvailabilities = getProductAvailabilityPromises( productManufacturers, baseUrl )
-	return buildProductAvailabilityMap( productManufacturers, productAvailabilities )
+	const createProductAvailabilityPromise = ( productManufacturer ) => {
+		return axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
+	}
+
+	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
+		createProductAvailabilityPromise( productManufacturer )
+	} )
+	console.log( 
+		'productAvailabilityPromises in getProductAvailabilities function:', 
+		productAvailabilityPromises 
+	)
+
+	return buildProductAvailabilityMap( productManufacturers, Promise
+		.all( productAvailabilityPromises )
+		.then( response => {
+			console.log( 'response (headers, config, data) in getProductAvailabilities function:', response )
+			const allAvailabilities = response.map( serverResponse => serverResponse.data.response )
+			console.log( 'allAvailabilities (only data) in getProductAvailabilities function:', allAvailabilities )
+			
+			return allAvailabilities
+		} ) )
 }
 
 const buildCompleteProductList = ( products, productAvailabilities ) => {
