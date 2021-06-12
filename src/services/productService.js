@@ -10,8 +10,6 @@ const getProducts = ( baseUrl ) => {
 		] )
 		.then( response => {
 			const allProducts = response.map( response => response.data )
-			console.log( 'all products (only data):', allProducts )
-
 			// allProducts contains [0]: gloves, [1]: facemasks, [2]: beanies
 			return allProducts
 		} )
@@ -26,23 +24,16 @@ const findManufacturers = productsArray => {
 		}
 	}
 
-	console.log( 'manufacturers in findManufacturers function:', manufacturers )
 	return manufacturers
 }
 
 const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityData ) => {
-	console.log( 
-		'productAvailabilityData (response field) from buildProductAvailabilityMap function:', 
-		productAvailabilityData 
-	)
-
 	const productAvailabilityMap = new Map()
 
 	for( let i = 0; i < productManufacturers.length; i++ ) {
 		productAvailabilityMap.set( productManufacturers[ i ], productAvailabilityData[ i ] )
 	}
 
-	console.log( 'productAvailabilityMap (keys, values):', productAvailabilityMap )
 	return productAvailabilityMap
 }
 
@@ -55,33 +46,18 @@ const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 		return createProductAvailabilityPromise( productManufacturer )
 	} )
 
-	console.log( 
-		'productAvailabilityPromises in getProductAvailabilityPromises function:', 
-		productAvailabilityPromises 
-	)
-
 	return Promise
 		.all( productAvailabilityPromises )
-		.then( response => {
-			console.log(
-				'After availability promise creation.', '\n',
-				'response:', response
-			)
-
-			return response.map( serverResponse => { 
-				console.log( 
-					'After availability promise creation.', '\n',
-					'serverResponse:', serverResponse, '\n',
-					'serverResponse.data:', serverResponse.data, '\n'
-				)
-				
-				return serverResponse.data
-			} ) 
-		} )
+		.then( response => response.map( serverResponse => serverResponse.data ) )
 }
 
 const buildCompleteProductList = ( products, productAvailabilities ) => {
 	console.log( 'productAvailabilities in buildCompleteProductList function:', productAvailabilities )
+
+	const testProductAvailability = productAvailabilities
+		.get( 'ippal' )
+		.filter( id => id === '5A32A104E2E0A003B3064' )
+	console.log( 'testProductAvailability in buildCompleteProductList function:', testProductAvailability )
 
 	const addAvailabilityInfo = ( product ) => {
 		return (
@@ -109,7 +85,7 @@ const buildCompleteProductList = ( products, productAvailabilities ) => {
 	}
 
 	return products.map( productList => {
-		productList.map( addAvailabilityInfo )
+		return productList.map( addAvailabilityInfo )
 	} )
 }
 

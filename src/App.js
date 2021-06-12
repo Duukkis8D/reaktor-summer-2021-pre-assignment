@@ -12,8 +12,6 @@ const App = () => {
 	const [ productManufacturers, setProductManufacturers ] = useState( [] )
 	// Gets all product data (except availability).
 	useEffect( () => {
-		//console.log( 'productManufacturers in the beginning of useEffect: ', productManufacturers )
-
 		productService
 			.getProducts( baseUrl )
 			.then( productData => {
@@ -26,8 +24,6 @@ const App = () => {
 			} )
 	}, [] )
 
-	console.log( 'productManufacturers after useEffect: ', productManufacturers )
-
 	const [ productAvailabilities, setProductAvailabilities ] = useState( new Map() )
 	// Gets all product availability data.
 	useEffect( () => {
@@ -38,8 +34,6 @@ const App = () => {
 				   .buildProductAvailabilityMap( productManufacturers, productAvailabilities )
 				setProductAvailabilities( productAvailabilityData )
 			 } )
-
-		console.log( 'productAvailabilities Map object in state: ', productAvailabilities )
 	}, [ productManufacturers ] )
 
 	const [ productsAndAvailabilities, setProductsAndAvailabilities ] = useState( [] )
@@ -60,8 +54,7 @@ const App = () => {
 				<div id='filterProductsAndProductListContainer'>
 					<Filter productType={ productType }
 						    handleProductTypeChange={ handleProductTypeChange }></Filter>
-					<ProductList products={ products }
-								 productsAndAvailabilities={ productsAndAvailabilities }
+					<ProductList productsAndAvailabilities={ productsAndAvailabilities }
 								 productType={ productType }></ProductList>
 				</div>
 			)

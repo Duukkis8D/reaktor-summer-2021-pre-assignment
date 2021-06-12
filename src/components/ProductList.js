@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ProductList = ( { products, productType } ) => {
+const ProductList = ( { productsAndAvailabilities, productType } ) => {
 	const renderProductList = () => {
 		if( productType !== '' ) {
 			return (
@@ -26,6 +26,9 @@ const ProductList = ( { products, productType } ) => {
 
 	const renderProducts = () => {
 		if( productType === 'gloves' ) {
+			console.log( 'productsAndAvailabilities[0] in renderProducts function:', productsAndAvailabilities[0] )
+			return productsAndAvailabilities[0]
+			/*
 			return (
 				products[0].map( product => 
 					<tr key={ product.id }>
@@ -38,34 +41,15 @@ const ProductList = ( { products, productType } ) => {
 					</tr>
 				)
 			)
+			*/
 		}
 		if( productType === 'facemasks' ) {
-			return (
-				products[1].map( product => 
-					<tr key={ product.id }>
-						<td key={ product.id }>{ product.id }</td>
-						<td key={ product.type }>{ product.type }</td>
-						<td key={ product.name }>{ product.name }</td>
-						<td key={ product.color }>{ product.color.map( color => `${color} ` ) }</td>
-						<td key={ product.manufacturer }>{ product.manufacturer }</td>
-						<td key={ product.price }>{ product.price }</td>
-					</tr>
-				)
-			)
+			console.log( 'productsAndAvailabilities[1] in renderProducts function:', productsAndAvailabilities[1] )
+			return productsAndAvailabilities[1]
 		}
 		if( productType === 'beanies' ) {
-			return (
-				products[2].map( product => 
-					<tr key={ product.id }>
-						<td key={ product.id }>{ product.id }</td>
-						<td key={ product.type }>{ product.type }</td>
-						<td key={ product.name }>{ product.name }</td>
-						<td key={ product.color }>{ product.color.map( color => `${color} ` ) }</td>
-						<td key={ product.manufacturer }>{ product.manufacturer }</td>
-						<td key={ product.price }>{ product.price }</td>
-					</tr>
-				)
-			)
+			console.log( 'productsAndAvailabilities[2] in renderProducts function:', productsAndAvailabilities[2] )
+			return productsAndAvailabilities[2]
 		} else return <tr><td>Loading product data. Please wait.</td></tr>
 	}
 
