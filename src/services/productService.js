@@ -46,28 +46,38 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 	return productAvailabilityMap
 }
 
-const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
+const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 	const createProductAvailabilityPromise = ( productManufacturer ) => {
 		return axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
 	}
 
 	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
-		createProductAvailabilityPromise( productManufacturer )
+		return createProductAvailabilityPromise( productManufacturer )
 	} )
+
 	console.log( 
-		'productAvailabilityPromises in getProductAvailabilities function:', 
+		'productAvailabilityPromises in getProductAvailabilityPromises function:', 
 		productAvailabilityPromises 
 	)
 
-	return buildProductAvailabilityMap( productManufacturers, Promise
+	return Promise
 		.all( productAvailabilityPromises )
 		.then( response => {
-			console.log( 'response (headers, config, data) in getProductAvailabilities function:', response )
-			const allAvailabilities = response.map( serverResponse => serverResponse.data.response )
-			console.log( 'allAvailabilities (only data) in getProductAvailabilities function:', allAvailabilities )
-			
-			return allAvailabilities
-		} ) )
+			console.log(
+				'After availability promise creation.', '\n',
+				'response:', response
+			)
+
+			return response.map( serverResponse => { 
+				console.log( 
+					'After availability promise creation.', '\n',
+					'serverResponse:', serverResponse, '\n',
+					'serverResponse.data:', serverResponse.data, '\n'
+				)
+				
+				return serverResponse.data
+			} ) 
+		} )
 }
 
 const buildCompleteProductList = ( products, productAvailabilities ) => {
@@ -103,4 +113,10 @@ const buildCompleteProductList = ( products, productAvailabilities ) => {
 	} )
 }
 
-export default { getProducts, findManufacturers, buildCompleteProductList, getProductAvailabilities }
+export default { 
+	getProducts, 
+	findManufacturers, 
+	buildCompleteProductList, 
+	buildProductAvailabilityMap, 
+	getProductAvailabilityPromises 
+}
