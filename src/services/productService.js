@@ -54,10 +54,26 @@ const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 const buildCompleteProductList = ( products, productAvailabilities ) => {
 	console.log( 'productAvailabilities in buildCompleteProductList function:', productAvailabilities )
 
-	const testProductAvailability = productAvailabilities
-		.get( 'ippal' )
-		.filter( id => id === '5A32A104E2E0A003B3064' )
-	console.log( 'testProductAvailability in buildCompleteProductList function:', testProductAvailability )
+	try {
+		const testProductId = products[0][0].id.toUpperCase()
+		console.log( 'testProductId in buildCompleteProductList function:', testProductId )
+		const testProductManufacturer = products[0][0].manufacturer
+		console.log( 'testProductManufacturer in buildCompleteProductList function:', testProductManufacturer )
+		const testProductAvailability = productAvailabilities
+			.get( testProductManufacturer )
+			.filter( availabilityObject => availabilityObject.id === testProductId )
+			.map( productAvailabilityInfo => {
+				return productAvailabilityInfo
+					.DATAPAYLOAD
+					.substring(
+						productAvailabilityInfo.DATAPAYLOAD.search( '<INSTOCKVALUE>' ) + 14,
+						productAvailabilityInfo.DATAPAYLOAD.search( '</INSTOCKVALUE>' )
+					)
+			} )[0].toLowerCase()
+		console.log( 'testProductAvailability in buildCompleteProductList function:', testProductAvailability )
+	} catch( error ) {
+		console.error( 'Error in testProductAvailability in buildCompleteProductList function:', error )
+	}
 
 	const addAvailabilityInfo = ( product ) => {
 		return (
@@ -70,15 +86,15 @@ const buildCompleteProductList = ( products, productAvailabilities ) => {
 				<td key={ product.price }>{ product.price }</td>
 				<td key={ product.availability }>{ productAvailabilities
 					.get( product.manufacturer )
-					.filter( id => id === product.id )
+					.filter( availabilityObject => availabilityObject.id === product.id.toUpperCase() )
 					.map( productAvailabilityInfo => {
 						return productAvailabilityInfo
 							.DATAPAYLOAD
 							.substring(
-								productAvailabilityInfo.DATAPAYLOAD.search( '<INSTOCKVALUE>' ),
+								productAvailabilityInfo.DATAPAYLOAD.search( '<INSTOCKVALUE>' ) + 14,
 								productAvailabilityInfo.DATAPAYLOAD.search( '</INSTOCKVALUE>' )
 							)
-					} ) }
+					} )[0].toLowerCase() }
 				</td>
 			</tr>
 		)
