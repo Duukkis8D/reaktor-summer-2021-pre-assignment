@@ -52,29 +52,6 @@ const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 }
 
 const buildCompleteProductList = ( products, productAvailabilities ) => {
-	console.log( 'productAvailabilities in buildCompleteProductList function:', productAvailabilities )
-
-	try {
-		const testProductId = products[0][0].id.toUpperCase()
-		console.log( 'testProductId in buildCompleteProductList function:', testProductId )
-		const testProductManufacturer = products[0][0].manufacturer
-		console.log( 'testProductManufacturer in buildCompleteProductList function:', testProductManufacturer )
-		const testProductAvailability = productAvailabilities
-			.get( testProductManufacturer )
-			.filter( availabilityObject => availabilityObject.id === testProductId )
-			.map( productAvailabilityInfo => {
-				return productAvailabilityInfo
-					.DATAPAYLOAD
-					.substring(
-						productAvailabilityInfo.DATAPAYLOAD.search( '<INSTOCKVALUE>' ) + 14,
-						productAvailabilityInfo.DATAPAYLOAD.search( '</INSTOCKVALUE>' )
-					)
-			} )[0].toLowerCase()
-		console.log( 'testProductAvailability in buildCompleteProductList function:', testProductAvailability )
-	} catch( error ) {
-		console.error( 'Error in testProductAvailability in buildCompleteProductList function:', error )
-	}
-
 	const addAvailabilityInfo = ( product ) => {
 		return (
 			<tr key={ product.id }>

@@ -28,20 +28,6 @@ const ProductList = ( { productsAndAvailabilities, productType } ) => {
 		if( productType === 'gloves' ) {
 			console.log( 'productsAndAvailabilities[0] in renderProducts function:', productsAndAvailabilities[0] )
 			return productsAndAvailabilities[0]
-			/*
-			return (
-				products[0].map( product => 
-					<tr key={ product.id }>
-						<td key={ product.id }>{ product.id }</td>
-						<td key={ product.type }>{ product.type }</td>
-						<td key={ product.name }>{ product.name }</td>
-						<td key={ product.color }>{ product.color.map( color => `${color} ` ) }</td>
-						<td key={ product.manufacturer }>{ product.manufacturer }</td>
-						<td key={ product.price }>{ product.price }</td>
-					</tr>
-				)
-			)
-			*/
 		}
 		if( productType === 'facemasks' ) {
 			console.log( 'productsAndAvailabilities[1] in renderProducts function:', productsAndAvailabilities[1] )
