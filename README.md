@@ -8,7 +8,7 @@ Instructions for the pre-assignment: https://www.reaktor.com/junior-dev-assignme
 
 ## Function
 
-The app is targeted for an imaginary clothing brand that needs a simple web app to use in their warehouses. It shows product information for three product categories: gloves, facemasks and beanies. The current category can be chosen from a drop-down menu. Unfortunately, page loading speed is a bit slow and there is no product availability information (yet).
+The app is targeted for an imaginary clothing brand that needs a simple web app to use in their warehouses. It shows product information for three product categories: gloves, facemasks and beanies. The current category can be chosen from a drop-down menu. Unfortunately, page loading speed is a bit slow.
 
 ## Usage
 

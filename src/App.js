@@ -5,7 +5,7 @@ import productService from './services/productService'
 import './css/App.css'
 
 const App = () => {
-	const baseUrl = 'http://localhost:3001/api'
+	const baseUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com/api'
 	
 	const [ products, setProducts ] = useState( [] )
 	const [ productType, setProductType ] = useState ( '' )
