@@ -49,7 +49,7 @@ const App = () => {
 	}
 
 	const renderIfThereIsProductData = () => {
-		if( typeof products !== 'undefined' && products.length > 0 ) {
+		if( typeof productsAndAvailabilities !== 'undefined' && productsAndAvailabilities.length > 0 ) {
 			return (
 				<div id='filterProductsAndProductListContainer'>
 					<Filter productType={ productType }
