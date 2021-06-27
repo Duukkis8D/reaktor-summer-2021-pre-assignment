@@ -27,6 +27,45 @@ const findManufacturers = productsArray => {
 	return manufacturers
 }
 
+const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
+	const createProductAvailabilityPromise = ( productManufacturer ) => {
+		axios
+			.get( baseUrl, { params: { manufacturer: productManufacturer } } )
+			.then( serverResponse => {
+				const productAvailabilityData = serverResponse.data
+
+				if( productAvailabilityData.length > 2 ) {
+					console.log( '1. createProductAvailabilityPromise(...), productAvailabilityData.length:', 
+						productAvailabilityData.length,
+						'valid server response with', productManufacturer, 'productManufacturer'
+					)
+					return productAvailabilityData
+				} else if( productAvailabilityData.length <= 2 ) {
+					console.log( '1. createProductAvailabilityPromise(...), productAvailabilityData.length:', 
+						productAvailabilityData.length,
+						'invalid server response with', 
+						productManufacturer, 'productManufacturer, fetching data again...'
+					)
+					createProductAvailabilityPromise( productManufacturer )
+				}
+			} )
+			.catch( error => {
+				console.error( '1. Error occurred while fetching product availability data.', error )
+			} )
+	}
+
+	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
+		return createProductAvailabilityPromise( productManufacturer )
+	} )
+
+	console.log( 
+		'2. getProductAvailabilityPromises(...), productAvailabilityPromises:', 
+		productAvailabilityPromises 
+	)
+
+	return productAvailabilityPromises
+}
+
 const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityData ) => {
 	const productAvailabilityMap = new Map()
 
@@ -37,18 +76,9 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 	return productAvailabilityMap
 }
 
-const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
-	const createProductAvailabilityPromise = ( productManufacturer ) => {
-		return axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
-	}
-
-	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
-		return createProductAvailabilityPromise( productManufacturer )
-	} )
-
-	return Promise
-		.all( productAvailabilityPromises )
-		.then( response => response.map( serverResponse => serverResponse.data ) )
+const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
+	const productAvailabilities = getProductAvailabilityPromises( productManufacturers, baseUrl )
+	return buildProductAvailabilityMap( productManufacturers, productAvailabilities )
 }
 
 const buildCompleteProductList = ( products, productAvailabilities ) => {
@@ -85,7 +115,6 @@ const buildCompleteProductList = ( products, productAvailabilities ) => {
 export default { 
 	getProducts, 
 	findManufacturers, 
-	buildCompleteProductList, 
-	buildProductAvailabilityMap, 
-	getProductAvailabilityPromises 
+	buildCompleteProductList,
+	getProductAvailabilities
 }

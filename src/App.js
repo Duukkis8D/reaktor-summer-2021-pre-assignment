@@ -5,7 +5,7 @@ import productService from './services/productService'
 import './css/App.css'
 
 const App = () => {
-	const baseUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com/api'
+	const baseUrl = 'http://localhost:3001/api'
 	
 	const [ products, setProducts ] = useState( [] )
 	const [ productType, setProductType ] = useState ( '' )
@@ -27,6 +27,14 @@ const App = () => {
 	const [ productAvailabilities, setProductAvailabilities ] = useState( new Map() )
 	// Gets all product availability data.
 	useEffect( () => {
+		const productAvailabilityData = productService
+			.getProductAvailabilities( productManufacturers, baseUrl )
+		
+		console.log( 'product availability useEffect, productAvailabilityData:', productAvailabilityData )
+		
+		setProductAvailabilities( productAvailabilityData )
+		
+		/*
 		productService
 			.getProductAvailabilityPromises( productManufacturers, baseUrl )
 			.then( productAvailabilities => {
@@ -34,6 +42,7 @@ const App = () => {
 				   .buildProductAvailabilityMap( productManufacturers, productAvailabilities )
 				setProductAvailabilities( productAvailabilityData )
 			 } )
+		*/
 	}, [ productManufacturers ] )
 
 	const [ productsAndAvailabilities, setProductsAndAvailabilities ] = useState( [] )
