@@ -1,6 +1,31 @@
 import React from 'react'
 import axios from 'axios'
 
+// axios response interceptor. Request is sent again if the array of server response is empty.
+axios.interceptors.response.use( response => {
+	const baseUrl = '/api'
+
+	console.log( 'axios response interceptor:' )
+	console.log( 'response in server response:', response )
+	console.log( 'response.data.length in server response:', response.data.length )
+
+	if( response.config.params.manufacturer ) {
+		if( response.data.length <= 2 ) {
+			console.error( 
+				'invalid server response detected with parameter:', response.config.params.manufacturer,
+				'response.data.length:', response.data.length,
+				'requesting data again...' 
+			)
+
+			return axios.get( baseUrl, { params: { manufacturer: response.config.params.manufacturer } } )
+		}
+	}
+
+	return response
+}, error => {
+	return Promise.reject( 'error occurred during API request:', error )
+} )
+
 const getProducts = ( baseUrl ) => {
 	return Promise
 		.all( [
@@ -27,31 +52,9 @@ const findManufacturers = productsArray => {
 	return manufacturers
 }
 
-const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
+const getProductAvailabilityData = ( productManufacturers, baseUrl ) => {
 	const createProductAvailabilityPromise = ( productManufacturer ) => {
-		axios
-			.get( baseUrl, { params: { manufacturer: productManufacturer } } )
-			.then( serverResponse => {
-				const productAvailabilityData = serverResponse.data
-
-				if( productAvailabilityData.length > 2 ) {
-					console.log( '1. createProductAvailabilityPromise(...), productAvailabilityData.length:', 
-						productAvailabilityData.length,
-						'valid server response with', productManufacturer, 'productManufacturer'
-					)
-					return productAvailabilityData
-				} else if( productAvailabilityData.length <= 2 ) {
-					console.log( '1. createProductAvailabilityPromise(...), productAvailabilityData.length:', 
-						productAvailabilityData.length,
-						'invalid server response with', 
-						productManufacturer, 'productManufacturer, fetching data again...'
-					)
-					createProductAvailabilityPromise( productManufacturer )
-				}
-			} )
-			.catch( error => {
-				console.error( '1. Error occurred while fetching product availability data.', error )
-			} )
+		return axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
 	}
 
 	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {
@@ -59,11 +62,19 @@ const getProductAvailabilityPromises = ( productManufacturers, baseUrl ) => {
 	} )
 
 	console.log( 
-		'2. getProductAvailabilityPromises(...), productAvailabilityPromises:', 
+		'1. getProductAvailabilityData(...), productAvailabilityPromises:', 
 		productAvailabilityPromises 
 	)
 
-	return productAvailabilityPromises
+	return Promise
+		.all( productAvailabilityPromises )
+		.then( serverResponses => { 
+			console.log( 
+				'return Promise.all( productAvailabilityPromises ).then( serverResponses => {', '\n',
+				'serverResponses:', serverResponses
+			)
+			return serverResponses.map( response => response.data ) 
+		} )
 }
 
 const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityData ) => {
@@ -73,12 +84,24 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 		productAvailabilityMap.set( productManufacturers[ i ], productAvailabilityData[ i ] )
 	}
 
-	return productAvailabilityMap
-}
+	if( typeof productAvailabilityData !== 'undefined' && productAvailabilityData.length > 0 ) {
+		console.log( 
+			'2. buildProductAvailabilityMap(...), productAvailabilityData:', 
+			productAvailabilityData
+		)
+		console.log(
+			'2. buildProductAvailabilityMap(...), productAvailabilityMap:', 
+			productAvailabilityMap
+		)
 
-const getProductAvailabilities = ( productManufacturers, baseUrl ) => {
-	const productAvailabilities = getProductAvailabilityPromises( productManufacturers, baseUrl )
-	return buildProductAvailabilityMap( productManufacturers, productAvailabilities )
+		return productAvailabilityMap
+	} else {
+		console.log(
+			'2. buildProductAvailabilityMap(...), returning empty Map'
+		)
+
+		return new Map()
+	}
 }
 
 const buildCompleteProductList = ( products, productAvailabilities ) => {
@@ -107,14 +130,28 @@ const buildCompleteProductList = ( products, productAvailabilities ) => {
 		)
 	}
 
-	return products.map( productList => {
-		return productList.map( addAvailabilityInfo )
-	} )
+	if( typeof productAvailabilities !== 'undefined' && productAvailabilities.size > 0 ) {
+		console.log(
+			'3. buildCompleteProductList(...), productAvailabilities:', 
+			productAvailabilities
+		)
+
+		return products.map( productList => {
+			return productList.map( addAvailabilityInfo )
+		} )
+	} else {
+		console.log(
+			'3. buildCompleteProductList(...), returning Loading product data. Please wait. info text'
+		)
+
+		return ( <tr><td>Loading product data. Please wait.</td></tr> )
+	}
 }
 
 export default { 
-	getProducts, 
-	findManufacturers, 
-	buildCompleteProductList,
-	getProductAvailabilities
+	getProducts,
+	findManufacturers,
+	getProductAvailabilityData,
+	buildProductAvailabilityMap,
+	buildCompleteProductList
 }

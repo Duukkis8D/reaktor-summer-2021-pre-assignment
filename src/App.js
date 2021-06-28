@@ -5,7 +5,7 @@ import productService from './services/productService'
 import './css/App.css'
 
 const App = () => {
-	const baseUrl = 'http://localhost:3001/api'
+	const baseUrl = '/api'
 	
 	const [ products, setProducts ] = useState( [] )
 	const [ productType, setProductType ] = useState ( '' )
@@ -24,34 +24,36 @@ const App = () => {
 			} )
 	}, [] )
 
-	const [ productAvailabilities, setProductAvailabilities ] = useState( new Map() )
+	const [ productAvailabilityData, setProductAvailabilityData ] = useState( [] )
 	// Gets all product availability data.
 	useEffect( () => {
-		const productAvailabilityData = productService
-			.getProductAvailabilities( productManufacturers, baseUrl )
-		
-		console.log( 'product availability useEffect, productAvailabilityData:', productAvailabilityData )
-		
-		setProductAvailabilities( productAvailabilityData )
-		
-		/*
 		productService
-			.getProductAvailabilityPromises( productManufacturers, baseUrl )
-			.then( productAvailabilities => {
-				const productAvailabilityData = productService
-				   .buildProductAvailabilityMap( productManufacturers, productAvailabilities )
-				setProductAvailabilities( productAvailabilityData )
-			 } )
-		*/
+			.getProductAvailabilityData( productManufacturers, baseUrl )
+			.then( productAvailabilityData => {
+				setProductAvailabilityData( productAvailabilityData )
+			} )
+			.catch( error => {
+				console.error( 'Error occurred while fetching product availability data.', error )
+			} )
+
+		console.log( 'product availability data useEffect, productAvailabilityData:', productAvailabilityData )
 	}, [ productManufacturers ] )
+
+	const [ productAvailabilityMap, setProductAvailabilityMap ] = useState( new Map() )
+	// Builds product availability Map data structure.
+	// key: product manufacturer, value: product availability data
+	useEffect( () => { 
+		setProductAvailabilityMap( productService
+			.buildProductAvailabilityMap( productManufacturers, productAvailabilityData ) )
+	}, [ productAvailabilityData ] )
 
 	const [ productsAndAvailabilities, setProductsAndAvailabilities ] = useState( [] )
 	// Merges product and availability information.
 	useEffect( () => {	
 		setProductsAndAvailabilities( productService
-			.buildCompleteProductList( products, productAvailabilities )
+			.buildCompleteProductList( products, productAvailabilityMap )
 		)
-	}, [ productAvailabilities ] )
+	}, [ productAvailabilityMap ] )
 
 	const handleProductTypeChange = ( event ) => {
 		setProductType( event.target.value )
