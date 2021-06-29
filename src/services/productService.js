@@ -1,37 +1,17 @@
 import React from 'react'
 import axios from 'axios'
+import retryApiRequest from './retryApiRequest'
 
-// axios response interceptor. Request is sent again if the array of server response is empty.
-axios.interceptors.response.use( response => {
-	const baseUrl = '/api'
+const axiosInstance = axios.create()
+const baseUrl = 'http://localhost:3001/api'
+retryApiRequest.axiosResponseInterceptor( axiosInstance, baseUrl )
 
-	console.log( 'axios response interceptor:' )
-	console.log( 'response in server response:', response )
-	console.log( 'response.data.length in server response:', response.data.length )
-
-	if( response.config.params.manufacturer ) {
-		if( response.data.length <= 2 ) {
-			console.error( 
-				'invalid server response detected with parameter:', response.config.params.manufacturer,
-				'response.data.length:', response.data.length,
-				'requesting data again...' 
-			)
-
-			return axios.get( baseUrl, { params: { manufacturer: response.config.params.manufacturer } } )
-		}
-	}
-
-	return response
-}, error => {
-	return Promise.reject( 'error occurred during API request:', error )
-} )
-
-const getProducts = ( baseUrl ) => {
+const getProducts = () => {
 	return Promise
 		.all( [
-			axios.get( baseUrl, { params: { category: 'gloves' } } ),
-			axios.get( baseUrl, { params: { category: 'facemasks' } } ),
-			axios.get( baseUrl, { params: { category: 'beanies' } } )
+			axiosInstance.get( baseUrl, { params: { category: 'gloves' } } ),
+			axiosInstance.get( baseUrl, { params: { category: 'facemasks' } } ),
+			axiosInstance.get( baseUrl, { params: { category: 'beanies' } } )
 		] )
 		.then( response => {
 			const allProducts = response.map( response => response.data )
@@ -52,9 +32,9 @@ const findManufacturers = productsArray => {
 	return manufacturers
 }
 
-const getProductAvailabilityData = ( productManufacturers, baseUrl ) => {
+const getProductAvailabilityData = ( productManufacturers ) => {
 	const createProductAvailabilityPromise = ( productManufacturer ) => {
-		return axios.get( baseUrl, { params: { manufacturer: productManufacturer } } )
+		return axiosInstance.get( baseUrl, { params: { manufacturer: productManufacturer } } )
 	}
 
 	const productAvailabilityPromises = productManufacturers.map( productManufacturer => {

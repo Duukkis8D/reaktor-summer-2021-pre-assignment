@@ -5,15 +5,13 @@ import productService from './services/productService'
 import './css/App.css'
 
 const App = () => {
-	const baseUrl = '/api'
-	
 	const [ products, setProducts ] = useState( [] )
 	const [ productType, setProductType ] = useState ( '' )
 	const [ productManufacturers, setProductManufacturers ] = useState( [] )
 	// Gets all product data (except availability).
 	useEffect( () => {
 		productService
-			.getProducts( baseUrl )
+			.getProducts()
 			.then( productData => {
 				setProducts( productData )
 
@@ -28,7 +26,7 @@ const App = () => {
 	// Gets all product availability data.
 	useEffect( () => {
 		productService
-			.getProductAvailabilityData( productManufacturers, baseUrl )
+			.getProductAvailabilityData( productManufacturers )
 			.then( productAvailabilityData => {
 				setProductAvailabilityData( productAvailabilityData )
 			} )
