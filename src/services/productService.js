@@ -41,18 +41,23 @@ const getProductAvailabilityData = ( productManufacturers ) => {
 		return createProductAvailabilityPromise( productManufacturer )
 	} )
 
+	/*
 	console.log( 
 		'1. getProductAvailabilityData(...), productAvailabilityPromises:', 
 		productAvailabilityPromises 
 	)
+	*/
 
 	return Promise
 		.all( productAvailabilityPromises )
 		.then( serverResponses => { 
+			/*
 			console.log( 
 				'return Promise.all( productAvailabilityPromises ).then( serverResponses => {', '\n',
 				'serverResponses:', serverResponses
 			)
+			*/
+			
 			return serverResponses.map( response => response.data ) 
 		} )
 }
@@ -65,6 +70,7 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 	}
 
 	if( typeof productAvailabilityData !== 'undefined' && productAvailabilityData.length > 0 ) {
+		/*
 		console.log( 
 			'2. buildProductAvailabilityMap(...), productAvailabilityData:', 
 			productAvailabilityData
@@ -73,12 +79,15 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 			'2. buildProductAvailabilityMap(...), productAvailabilityMap:', 
 			productAvailabilityMap
 		)
+		*/
 
 		return productAvailabilityMap
 	} else {
+		/*
 		console.log(
 			'2. buildProductAvailabilityMap(...), returning empty Map'
 		)
+		*/
 
 		return new Map()
 	}
@@ -111,18 +120,22 @@ const buildCompleteProductList = ( products, productAvailabilities ) => {
 	}
 
 	if( typeof productAvailabilities !== 'undefined' && productAvailabilities.size > 0 ) {
+		/*
 		console.log(
 			'3. buildCompleteProductList(...), productAvailabilities:', 
 			productAvailabilities
 		)
+		*/
 
 		return products.map( productList => {
 			return productList.map( addAvailabilityInfo )
 		} )
 	} else {
+		/*
 		console.log(
 			'3. buildCompleteProductList(...), returning Loading product data. Please wait. info text'
 		)
+		*/
 
 		return ( <tr><td>Loading product data. Please wait.</td></tr> )
 	}
