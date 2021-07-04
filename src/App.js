@@ -69,7 +69,7 @@ const App = () => {
 								 productType={ productType }></ProductList>
 				</div>
 			)
-		} else return <p>Loading product data. Please wait.</p>
+		} else return <p>Loading product data. Please wait. This might take about 30-60 seconds.</p>
 	}
 
 	return (

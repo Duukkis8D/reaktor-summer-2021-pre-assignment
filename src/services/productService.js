@@ -57,7 +57,7 @@ const getProductAvailabilityData = ( productManufacturers ) => {
 				'serverResponses:', serverResponses
 			)
 			*/
-			
+
 			return serverResponses.map( response => response.data ) 
 		} )
 }
@@ -95,28 +95,25 @@ const buildProductAvailabilityMap = ( productManufacturers, productAvailabilityD
 
 const buildCompleteProductList = ( products, productAvailabilities ) => {
 	const addAvailabilityInfo = ( product ) => {
-		return (
-			<tr key={ product.id }>
-				<td key={ product.id }>{ product.id }</td>
-				<td key={ product.type }>{ product.type }</td>
-				<td key={ product.name }>{ product.name }</td>
-				<td key={ product.color }>{ product.color.map( color => `${color} ` ) }</td>
-				<td key={ product.manufacturer }>{ product.manufacturer }</td>
-				<td key={ product.price }>{ product.price }</td>
-				<td key={ product.availability }>{ productAvailabilities
-					.get( product.manufacturer )
-					.filter( availabilityObject => availabilityObject.id === product.id.toUpperCase() )
-					.map( productAvailabilityInfo => {
-						return productAvailabilityInfo
-							.DATAPAYLOAD
-							.substring(
-								productAvailabilityInfo.DATAPAYLOAD.search( '<INSTOCKVALUE>' ) + 14,
-								productAvailabilityInfo.DATAPAYLOAD.search( '</INSTOCKVALUE>' )
-							)
-					} )[0].toLowerCase() }
-				</td>
-			</tr>
-		)
+		return ( {
+			id: product.id,
+			type: product.type,
+			name: product.name,
+			color: product.color.map( color => `${color} ` ),
+			price: product.price,
+			manufacturer: product.manufacturer,
+			availability: productAvailabilities
+				.get( product.manufacturer )
+				.filter( availabilityObject => availabilityObject.id === product.id.toUpperCase() )
+				.map( productAvailabilityInfo => {
+					return productAvailabilityInfo
+						.DATAPAYLOAD
+						.substring(
+							productAvailabilityInfo.DATAPAYLOAD.search( '<INSTOCKVALUE>' ) + 14,
+							productAvailabilityInfo.DATAPAYLOAD.search( '</INSTOCKVALUE>' )
+						)
+				} )[0].toLowerCase()
+		} )
 	}
 
 	if( typeof productAvailabilities !== 'undefined' && productAvailabilities.size > 0 ) {

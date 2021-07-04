@@ -8,7 +8,7 @@ html {
 }
 
 #appContainer {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -23,11 +23,9 @@ h2 {
     font-weight: normal;
 }
 
-#filterProductsAndProductListContainer > * {
-    padding: 15px;
-}
-
 #filterProductsContainer {
+    padding: 15px;
+    margin-bottom: 15px;
     background-color: lightgray;
 }
 
@@ -35,17 +33,7 @@ select {
     margin-top: 5px;
 }
 
-table {
-    font-size: 14px;
-    text-align: left;
-}
-
-table th,
-table td {
-    padding: 3px 10px;
-}
-
-table th:first-child,
-table td:first-child {
-    padding-left: 0;
+.ReactVirtualized__Table__headerColumn:first-of-type,
+.ReactVirtualized__Table__rowColumn:first-of-type {
+    margin-left: 0;
 }
