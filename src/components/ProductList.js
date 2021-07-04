@@ -7,19 +7,19 @@ const ProductList = ( { productsAndAvailabilities, productType } ) => {
 		if( productType !== '' ) {
 			return (
 				<Table
-					width={ 1200 }
+					width={ 1100 }
 					height={ 500 }
 					headerHeight={ 20 }
 					rowHeight={ 30 }
 					rowCount={ getProductData().length }
 					rowGetter={ ( { index } ) => getProductData()[index] }>
-					<Column label="id" dataKey="id" width={ 220 } flexGrow={ 1 } flexShrink={ 2 } />
-					<Column label="type" dataKey="type" width={ 60 } flexGrow={ 1 } flexShrink={ 2 } />
-					<Column label="name" dataKey="name" width={ 300 } flexGrow={ 1 } flexShrink={ 2 } />
-					<Column label="color" dataKey="color" width={ 100 } flexGrow={ 1 } flexShrink={ 2 } />
+					<Column label="id" dataKey="id" width={ 220 } flexGrow={ 1 } />
+					<Column label="type" dataKey="type" width={ 80 } flexGrow={ 1 } flexShrink={ 2 } />
+					<Column label="name" dataKey="name" width={ 200 } flexGrow={ 1 } />
+					<Column label="color" dataKey="color" width={ 100 } flexGrow={ 1 } />
 					<Column label="price" dataKey="price" width={ 60 } flexGrow={ 1 } flexShrink={ 2 } />
-					<Column label="manufacturer" dataKey="manufacturer" width={ 130 } flexGrow={ 1 } flexShrink={ 2 } />
-					<Column label="availability" dataKey="availability" width={ 130 } flexGrow={ 1 } flexShrink={ 2 } />
+					<Column label="manufacturer" dataKey="manufacturer" width={ 140 } flexGrow={ 1 } />
+					<Column label="availability" dataKey="availability" width={ 140 } flexGrow={ 1 } />
 				</Table>
 			)
 		} else return // return nothing

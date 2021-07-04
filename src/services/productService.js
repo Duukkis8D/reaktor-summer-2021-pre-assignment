@@ -2,7 +2,7 @@ import axios from 'axios'
 import retryApiRequest from './retryApiRequest'
 
 const axiosInstance = axios.create()
-const baseUrl = 'http://localhost:3001/api'
+const baseUrl = 'https://reaktor-2021-duukkis8d.herokuapp.com/api'
 retryApiRequest.axiosResponseInterceptor( axiosInstance, baseUrl )
 
 const getProducts = () => {
@@ -60,8 +60,8 @@ const buildCompleteProductList = ( products, productAvailabilities ) => {
 		return ( {
 			id: product.id,
 			type: product.type,
-			name: product.name,
-			color: product.color.map( color => `${color} ` ),
+			name: product.name.toLowerCase(),
+			color: product.color.map( color => `${color}` ),
 			price: product.price,
 			manufacturer: product.manufacturer,
 			availability: productAvailabilities
