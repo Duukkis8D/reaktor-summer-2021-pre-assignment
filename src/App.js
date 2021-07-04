@@ -33,10 +33,6 @@ const App = () => {
 			.catch( error => {
 				console.error( 'Error occurred while fetching product availability data.', error )
 			} )
-
-		/*
-		console.log( 'product availability data useEffect, productAvailabilityData:', productAvailabilityData )
-		*/
 	}, [ productManufacturers ] )
 
 	const [ productAvailabilityMap, setProductAvailabilityMap ] = useState( new Map() )

@@ -27,17 +27,14 @@ const ProductList = ( { productsAndAvailabilities, productType } ) => {
 
 	const getProductData = () => {
 		if( productType === 'gloves' ) {
-			//console.log( 'productsAndAvailabilities[0] in renderProducts function:', productsAndAvailabilities[0] )
 			return productsAndAvailabilities[0]
 		}
 		if( productType === 'facemasks' ) {
-			//console.log( 'productsAndAvailabilities[1] in renderProducts function:', productsAndAvailabilities[1] )
 			return productsAndAvailabilities[1]
 		}
 		if( productType === 'beanies' ) {
-			//console.log( 'productsAndAvailabilities[2] in renderProducts function:', productsAndAvailabilities[2] )
 			return productsAndAvailabilities[2]
-		} else return [ 'Loading product data. Please wait. This might take around 1 minute' ]
+		} else return [ 'Unexpected error occurred. Please refresh page.' ]
 	}
 
 	return (  
