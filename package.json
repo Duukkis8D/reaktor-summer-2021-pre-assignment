@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "*",
-    "@testing-library/react": "*",
-    "@testing-library/user-event": "*",
-    "axios": "*",
-    "react": "*",
-    "react-dom": "*",
-    "react-scripts": "*",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.1",
+    "@testing-library/user-event": "^12.2.2",
+    "axios": "^0.21.0",
+    "react": "^16.0.0-alpha",
+    "react-dom": "^16.0.0-alpha",
+    "react-scripts": "^4.0.2",
     "react-virtualized": "^9.22.3",
-    "web-vitals": "*"
+    "web-vitals": "^1.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -39,8 +39,8 @@
     ]
   },
   "devDependencies": {
-    "eslint": "*",
-    "eslint-plugin-react": "*",
-    "eslint-plugin-react-hooks": "*"
+    "eslint": "^7.18.0",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }
