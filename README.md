@@ -10,6 +10,8 @@ The app is targeted for an imaginary clothing brand that needs a simple web app 
 
 ## Usage
 
+The app has two sides: this frontend (repository) and the following backend (repository) https://github.com/Duukkis8D/reaktor-summer-2021-heroku-app.
+
 The app can be started in https://reaktor-2021-duukkis8d.herokuapp.com/.
 
 Alternatively it can be started in local development environment by first cloning this repository to any directory.
